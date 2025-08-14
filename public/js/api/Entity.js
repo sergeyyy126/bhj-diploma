@@ -9,20 +9,14 @@ class Entity {
    * Это могут быть счета или доходы/расходы
    * (в зависимости от того, что наследуется от Entity)
    * */
-  static list(data, callback){
-    let params = "";
-    if (data.account_id) {
-      params = "?account_id=" + data.account_id;
-    }
-
-    createRequest({
-      url: this.URL + params,
+  static list(data, callback) {
+    const obj = {
       method: "GET",
-      responseType: "json",
-      callback: (err, response) => {
-        callback(err, response);
-      },
-    });
+      url: this.URL,
+      data,
+      callback,
+    };
+    createRequest(obj);
   }
 
   /**
@@ -34,15 +28,13 @@ class Entity {
     // Метод PUT /account - body(name) - вернет success = true
     // Метод PUT /transaction - body(type, name, sum и account_id) - вернет success = true,
     // если в поле сумма было передано не число то вернет ошибку "Недопустимые символы в поле Сумма" и success = false
-    createRequest({
-      url: this.URL,
+    const obj = {
       method: "PUT",
-      responseType: "json",
+      url: this.URL,
       data,
-      callback: (err, response) => {
-        callback(err, response);
-      },
-    });
+      callback,
+    };
+    createRequest(obj);
   }
 
   /**
@@ -50,14 +42,12 @@ class Entity {
    * (в зависимости от того, что наследуется от Entity)
    * */
   static remove(data, callback) {
-    createRequest({
-      url: this.URL,
+    const obj = {
       method: "DELETE",
-      responseType: "json",
+      url: this.URL,
       data,
-      callback: (err, response) => {
-        callback(err, response);
-      },
-    });
+      callback,
+    };
+    createRequest(obj);
   }
 }

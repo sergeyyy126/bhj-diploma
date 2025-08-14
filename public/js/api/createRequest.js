@@ -4,34 +4,32 @@
  * */
 const createRequest = (options = {}) => {
   const xhr = new XMLHttpRequest();
-  xhr.responseType = options.responseType;
-
-  try {
-    if (options.method === "GET") {
-      xhr.open(options.method, options.url);
-      xhr.send();
-    } else {
-      // данные из объекта data должны передаваться через объект FormData
-      let formData = new FormData();
-      for (const key in options.data) {
-        formData.append(key, options.data[key]);
+  if (options.method === "GET") {
+    let url = options.url;
+    if (options.data) {
+      url += "?";
+      for (let [key, value] of Object.entries(options.data)) {
+        url += `${key}=${value}&&`;
       }
-      xhr.open(options.method, options.url);
-      xhr.send(formData);
     }
-  } catch (error) {
-    console.log(error);
+    xhr.open(options.method, url);
+    xhr.responseType = "json";
+    xhr.send();
+  } else {
+    xhr.open(options.method, options.url);
+    xhr.responseType = "json";
+    if (options.data) {
+      const formData = new FormData();
+      for (let [key, value] of Object.entries(options.data)) {
+        formData.append(key, value);
+      }
+      xhr.send(formData);
+    } else {
+      xhr.send();
+    }
   }
 
   xhr.addEventListener("load", () => {
-    if (xhr.response.success) {
-      options.callback(null, xhr.response);
-    } else {
-      options.callback(xhr.response.error, xhr.response);
-    }
-  });
-
-  xhr.addEventListener("error", () => {
-    options.callback(`Ошибка загрузки: ${xhr.statusText}`);
+    options.callback(xhr.response.error, xhr.response);
   });
 };

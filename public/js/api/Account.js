@@ -11,14 +11,11 @@ class Account extends Entity {
   static URL = "/account";
 
   static get(id = "", callback) {
-    // Метод GET /account/id - вернет данные по конкретному счету
-    createRequest({
-      url: this.URL + "/" + id,
+    const obj = {
       method: "GET",
-      responseType: "json",
-      callback: (err, response) => {
-        callback(err, response);
-      },
-    });
+      url: this.URL + "/" + id,
+      callback,
+    };
+    createRequest(obj);
   }
 }
