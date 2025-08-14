@@ -18,25 +18,23 @@ class Sidebar {
    * при нажатии на кнопку .sidebar-toggle
    * */
   static initToggleButton() {
-    const btn = document.querySelector(".sidebar-toggle");
-    const body = document.body;
+  const btn = document.querySelector('.sidebar-toggle');
+  const body = document.body;
 
-    if (!btn || !body) return;
+  if (!btn || !body) return;
 
-    btn.addEventListener("click", function (e) {
-      e.preventDefault();
+  btn.addEventListener('click', function (e) {
+    e.preventDefault();
 
-      const isOpen =
-        body.classList.contains("sidebar-open") &&
-        body.classList.contains("sidebar-collapse");
+    const isOpen = body.classList.contains('sidebar-open') && body.classList.contains('sidebar-collapse');
 
-      if (isOpen) {
-        body.classList.remove("sidebar-open", "sidebar-collapse");
-      } else {
-        body.classList.add("sidebar-open", "sidebar-collapse");
-      }
-    });
-  }
+    if (isOpen) {
+      body.classList.remove('sidebar-open', 'sidebar-collapse');
+    } else {
+      body.classList.add('sidebar-open', 'sidebar-collapse');
+    }
+  });
+}
 
   /**
    * При нажатии на кнопку входа, показывает окно входа
@@ -46,26 +44,23 @@ class Sidebar {
    * выходу устанавливает App.setState( 'init' )
    * */
   static initAuthLinks() {
-    const registerBtn =
-      document.getElementsByClassName("menu-item_register")[0].children[0];
-    registerBtn.addEventListener("click", () => {
-      App.getModal("register").open();
+    const registerBtn = document.getElementsByClassName('menu-item_register')[0].children[0];
+    registerBtn.addEventListener('click', () => {
+      App.getModal('register').open();
     });
 
-    const loginBtn =
-      document.getElementsByClassName("menu-item_login")[0].children[0];
-    loginBtn.addEventListener("click", () => {
-      App.getModal("login").open();
+    const loginBtn = document.getElementsByClassName('menu-item_login')[0].children[0];
+    loginBtn.addEventListener('click', () => {
+      App.getModal('login').open();
     });
 
-    const logoutBtn =
-      document.getElementsByClassName("menu-item_logout")[0].children[0];
-    logoutBtn.addEventListener("click", () => {
+    const logoutBtn = document.getElementsByClassName('menu-item_logout')[0].children[0];
+    logoutBtn.addEventListener('click', () => {
       User.logout((err, response) => {
-        if (response && response.success) {
-          App.setState("init");
+        if(response && response.success) {
+          App.setState('init');
         }
-      });
+      })
     });
   }
 }

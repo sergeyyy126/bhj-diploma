@@ -14,7 +14,7 @@ class AsyncForm {
    * */
   constructor(element) {
     if (!element) {
-      throw "Error";
+      throw new Error("AsyncForm: element is required");
     }
     this.element = element;
     this.registerEvents();
@@ -25,10 +25,10 @@ class AsyncForm {
    * вызывает метод submit()
    * */
   registerEvents() {
-    this.element.addEventListener('submit', (event) => {
+    this.element.addEventListener("submit", (event) => {
       event.preventDefault();
       this.submit();
-    })
+    });
   }
 
   /**
@@ -40,11 +40,19 @@ class AsyncForm {
    * */
   getData() {
     const formData = new FormData(this.element);
-    const obj = {};
-    for(let [name, value] of formData) {
-      obj[name] = value;
+    const data = {};
+    for (const [key, value] of formData.entries()) {
+      // Если поле повторяется (массив чекбоксов/мультиселект), собираем в массив
+      if (key in data) {
+        if (!Array.isArray(data[key])) {
+          data[key] = [data[key]];
+        }
+        data[key].push(value);
+      } else {
+        data[key] = value;
+      }
     }
-    return obj;
+    return data;
   }
 
   onSubmit(options){
@@ -56,6 +64,7 @@ class AsyncForm {
    * данные, полученные из метода getData()
    * */
   submit() {
-    this.onSubmit(this.getData());
+    const data = this.getData();
+    this.onSubmit(data);
   }
 }
