@@ -2,34 +2,63 @@
  * Основная функция для совершения запросов
  * на сервер.
  * */
+
 const createRequest = (options = {}) => {
+  const method = (options.method || "GET").toUpperCase();
+  const urlBase = options.url || "";
+  const callback =
+    typeof options.callback === "function" ? options.callback : () => {};
   const xhr = new XMLHttpRequest();
-  if (options.method === "GET") {
-    let url = options.url;
-    if (options.data) {
-      url += "?";
-      for (let [key, value] of Object.entries(options.data)) {
-        url += `${key}=${value}&&`;
-      }
-    }
-    xhr.open(options.method, url);
-    xhr.responseType = "json";
-    xhr.send();
-  } else {
-    xhr.open(options.method, options.url);
-    xhr.responseType = "json";
-    if (options.data) {
-      const formData = new FormData();
-      for (let [key, value] of Object.entries(options.data)) {
-        formData.append(key, value);
-      }
-      xhr.send(formData);
-    } else {
-      xhr.send();
+
+  let url = urlBase;
+
+  if (method === "GET" && options.data && typeof options.data === "object") {
+    const params = Object.keys(options.data)
+      .map(
+        (k) => encodeURIComponent(k) + "=" + encodeURIComponent(options.data[k])
+      )
+      .join("&");
+    if (params) {
+      url += (url.indexOf("?") === -1 ? "?" : "&") + params;
     }
   }
 
-  xhr.addEventListener("load", () => {
-    options.callback(xhr.response.error, xhr.response);
-  });
+  xhr.open(method, url);
+  xhr.responseType = "json";
+  xhr.timeout = options.timeout || 10000; // опционально можно передавать timeout в options
+
+  xhr.onload = () => {
+    const status = xhr.status;
+    // Успешные коды 200-299
+    if (status >= 200 && status < 300) {
+      callback(null, xhr.response);
+    } else {
+      // Передаём объект ошибки с кодом и, если есть, текстом ответа
+      const err = new Error("HTTP error: " + status);
+      err.status = status;
+      err.response = xhr.response;
+      callback(err, xhr.response);
+    }
+  };
+
+  xhr.onerror = () => {
+    callback(new Error("Network error"), null);
+  };
+
+  xhr.ontimeout = () => {
+    callback(new Error("Request timed out"), null);
+  };
+
+  if (method === "GET" || !options.data) {
+    xhr.send();
+  } else {
+    // Отправляем FormData для не-GET запросов
+    const formData = new FormData();
+    if (typeof options.data === "object") {
+      Object.keys(options.data).forEach((key) => {
+        formData.append(key, options.data[key]);
+      });
+    }
+    xhr.send(formData);
+  }
 };

@@ -10,13 +10,12 @@ class Entity {
    * (в зависимости от того, что наследуется от Entity)
    * */
   static list(data, callback) {
-    const obj = {
-      method: "GET",
+    createRequest({
       url: this.URL,
-      data,
-      callback,
-    };
-    createRequest(obj);
+      method: "GET",
+      data: data || {},
+      callback: callback || function () {},
+    });
   }
 
   /**
@@ -25,16 +24,12 @@ class Entity {
    * что наследуется от Entity)
    * */
   static create(data, callback) {
-    // Метод PUT /account - body(name) - вернет success = true
-    // Метод PUT /transaction - body(type, name, sum и account_id) - вернет success = true,
-    // если в поле сумма было передано не число то вернет ошибку "Недопустимые символы в поле Сумма" и success = false
-    const obj = {
-      method: "PUT",
+    createRequest({
       url: this.URL,
-      data,
-      callback,
-    };
-    createRequest(obj);
+      method: "PUT",
+      data: data || {},
+      callback: callback || function () {},
+    });
   }
 
   /**
@@ -42,12 +37,11 @@ class Entity {
    * (в зависимости от того, что наследуется от Entity)
    * */
   static remove(data, callback) {
-    const obj = {
-      method: "DELETE",
+    createRequest({
       url: this.URL,
-      data,
-      callback,
-    };
-    createRequest(obj);
+      method: "DELETE",
+      data: data || {},
+      callback: callback || function () {},
+    });
   }
 }

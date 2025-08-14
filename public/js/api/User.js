@@ -9,28 +9,51 @@ class User {
    * Устанавливает текущего пользователя в
    * локальном хранилище.
    * */
+  // static setCurrent(user) {
+  //   localStorage.setItem("user", JSON.stringify(user));
+  // }
   static setCurrent(user) {
-    localStorage.setItem("user", JSON.stringify(user));
+    if (user === undefined || user === null) return;
+    try {
+      localStorage.setItem("user", JSON.stringify(user));
+    } catch (e) {
+      // handle storage errors if needed
+    }
   }
 
   /**
    * Удаляет информацию об авторизованном
    * пользователе из локального хранилища.
    * */
+  // static unsetCurrent() {
+  //   localStorage.removeItem("user");
+  // }
   static unsetCurrent() {
-    localStorage.removeItem("user");
+    try {
+      localStorage.removeItem("user");
+    } catch (e) {
+      // ignore
+    }
   }
 
   /**
    * Возвращает текущего авторизованного пользователя
    * из локального хранилища
    * */
+  // static current() {
+  //   const user = localStorage.user;
+  //   if (user) {
+  //     return JSON.parse(user);
+  //   } else {
+  //     return user;
+  //   }
+  // }
   static current() {
-    const user = localStorage.user;
-    if (user) {
-      return JSON.parse(user);
-    } else {
-      return user;
+    try {
+      const raw = localStorage.getItem("user");
+      return raw ? JSON.parse(raw) : undefined;
+    } catch (e) {
+      return undefined;
     }
   }
 
@@ -38,20 +61,25 @@ class User {
    * Получает информацию о текущем
    * авторизованном пользователе.
    * */
+  //
   static fetch(callback) {
-    const obj = {
-      method: "GET",
+    createRequest({
       url: this.URL + "/current",
-      callback: function (err, response) {
-        if (response.success) {
-          User.setCurrent(response.user);
-        } else {
-          User.unsetCurrent();
+      method: "GET",
+      responseType: "json",
+      callback: (err, response) => {
+        if (err) {
+          callback(err, response);
+          return;
         }
-        callback(err, response);
+        if (response && response.success) {
+          if (response.user) this.setCurrent(response.user);
+        } else {
+          this.unsetCurrent();
+        }
+        callback(null, response);
       },
-    };
-    createRequest(obj);
+    });
   }
 
   /**
@@ -60,18 +88,14 @@ class User {
    * сохранить пользователя через метод
    * User.setCurrent.
    * */
+  //
   static login(data, callback) {
     createRequest({
       url: this.URL + "/login",
       method: "POST",
-      responseType: "json",
       data,
-      callback: (err, response) => {
-        if (response && response.user) {
-          this.setCurrent(response.user);
-        }
-        callback(err, response);
-      },
+      responseType: "json",
+      callback,
     });
   }
 
@@ -81,17 +105,22 @@ class User {
    * сохранить пользователя через метод
    * User.setCurrent.
    * */
+  //
   static register(data, callback) {
     createRequest({
       url: this.URL + "/register",
       method: "POST",
-      responseType: "json",
       data,
+      responseType: "json",
       callback: (err, response) => {
-        if (err === null) {
+        if (err) {
+          callback(err, response);
+          return;
+        }
+        if (response && response.success && response.user) {
           this.setCurrent(response.user);
         }
-        callback(err, response);
+        callback(null, response);
       },
     });
   }
