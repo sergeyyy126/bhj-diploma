@@ -25,15 +25,14 @@ const createRequest = (options = {}) => {
 
   xhr.open(method, url);
   xhr.responseType = "json";
-  xhr.timeout = options.timeout || 10000; // опционально можно передавать timeout в options
+  xhr.timeout = options.timeout || 10000;
 
   xhr.onload = () => {
     const status = xhr.status;
-    // Успешные коды 200-299
+    
     if (status >= 200 && status < 300) {
       callback(null, xhr.response);
     } else {
-      // Передаём объект ошибки с кодом и, если есть, текстом ответа
       const err = new Error("HTTP error: " + status);
       err.status = status;
       err.response = xhr.response;
@@ -52,7 +51,6 @@ const createRequest = (options = {}) => {
   if (method === "GET" || !options.data) {
     xhr.send();
   } else {
-    // Отправляем FormData для не-GET запросов
     const formData = new FormData();
     if (typeof options.data === "object") {
       Object.keys(options.data).forEach((key) => {

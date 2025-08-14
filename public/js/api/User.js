@@ -9,9 +9,7 @@ class User {
    * Устанавливает текущего пользователя в
    * локальном хранилище.
    * */
-  // static setCurrent(user) {
-  //   localStorage.setItem("user", JSON.stringify(user));
-  // }
+ 
   static setCurrent(user) {
     if (user === undefined || user === null) return;
     try {
@@ -25,9 +23,7 @@ class User {
    * Удаляет информацию об авторизованном
    * пользователе из локального хранилища.
    * */
-  // static unsetCurrent() {
-  //   localStorage.removeItem("user");
-  // }
+  
   static unsetCurrent() {
     try {
       localStorage.removeItem("user");
@@ -40,14 +36,7 @@ class User {
    * Возвращает текущего авторизованного пользователя
    * из локального хранилища
    * */
-  // static current() {
-  //   const user = localStorage.user;
-  //   if (user) {
-  //     return JSON.parse(user);
-  //   } else {
-  //     return user;
-  //   }
-  // }
+  
   static current() {
     try {
       const raw = localStorage.getItem("user");
@@ -129,17 +118,33 @@ class User {
    * Производит выход из приложения. После успешного
    * выхода необходимо вызвать метод User.unsetCurrent
    * */
+  
   static logout(callback) {
     const obj = {
       method: "POST",
       url: this.URL + "/logout",
-      callback: function (err, response) {
-        if (response.success) {
+      callback: (err, response) => {
+      // Защита: если нет ответа, формируем понятную ошибку
+        if (err) {
+          if (typeof callback === 'function') callback(err, null);
+          return;
+        }
+
+        if (!response) {
+          const error = new Error('Empty response from server');
+          if (typeof callback === 'function') callback(error, null);
+          return;
+        }
+
+        // Явно проверяем success как true
+       if (response.success === true) {
           User.unsetCurrent(response.user);
         }
-        callback(err, response);
-      },
-    };
-    createRequest(obj);
+
+        if (typeof callback === 'function') {
+          callback(null, response);
+        }
+      }
+    }
   }
 }
