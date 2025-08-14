@@ -4,12 +4,13 @@
  * Имеет свойство URL, равное '/user'.
  * */
 class User {
+  static URL = '/user';
   /**
    * Устанавливает текущего пользователя в
    * локальном хранилище.
    * */
   static setCurrent(user) {
-
+    localStorage.setItem('user', JSON.stringify(user));
   }
 
   /**
@@ -17,7 +18,7 @@ class User {
    * пользователе из локального хранилища.
    * */
   static unsetCurrent() {
-
+    localStorage.removeItem('user');
   }
 
   /**
@@ -25,7 +26,12 @@ class User {
    * из локального хранилища
    * */
   static current() {
-
+    const user = localStorage.user;
+    if (user) {
+      return JSON.parse(user);
+    } else {
+      return user;
+    }
   }
 
   /**
@@ -33,6 +39,19 @@ class User {
    * авторизованном пользователе.
    * */
   static fetch(callback) {
+    const obj = {
+      method: "GET",
+      url: this.URL + '/current',
+      callback: function(err, response) {
+        if (response.success) {
+          User.setCurrent(response.user);
+        } else {
+          User.unsetCurrent();
+        }
+        callback(err, response);
+      }
+    };
+    createRequest(obj);
 
   }
 
@@ -64,7 +83,19 @@ class User {
    * User.setCurrent.
    * */
   static register(data, callback) {
-
+    
+    const obj = {
+      method: "POST",
+      url: this.URL + '/register',
+      data,
+      callback: function(err, response) {
+        if (response.success) {
+          User.setCurrent(response.user);
+        } 
+        callback(err, response);
+      }
+    };
+    createRequest(obj);
   }
 
   /**
@@ -72,6 +103,16 @@ class User {
    * выхода необходимо вызвать метод User.unsetCurrent
    * */
   static logout(callback) {
-
+    const obj = {
+      method: "POST",
+      url: this.URL + '/logout',
+      callback: function(err, response) {
+        if (response.success) {
+          User.unsetCurrent(response.user);
+        } 
+        callback(err, response);
+      }
+    };
+    createRequest(obj);
   }
 }
