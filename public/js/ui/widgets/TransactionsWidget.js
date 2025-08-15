@@ -23,12 +23,15 @@ class TransactionsWidget {
    * */
   registerEvents() {
     const income = document.getElementsByClassName('create-income-button')[0];
+    
     income.addEventListener('click', () => {
       App.getModal('newIncome').open();
-    })
+    });
+    
     const expense = document.getElementsByClassName('create-expense-button')[0];
+    
     expense.addEventListener('click', () => {
       App.getModal('newExpense').open();
-    })
+    });
   }
 }

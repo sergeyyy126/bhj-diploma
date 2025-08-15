@@ -145,14 +145,14 @@ class TransactionsPage {
   formatDate(date) {
     const month = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
     const dateObj = new Date(date);
-    return `${dateObj.getDate()} ${month[dateObj.getMonth()]} ${dateObj.getFullYear()} г. в ${dateObj.getHours()}:${dateObj.getMinutes()}`
+    return `${dateObj.getDate()} ${month[dateObj.getMonth()]} ${dateObj.getFullYear()} г. в ${dateObj.getHours()}:${dateObj.getMinutes()}`;
   }
 
   /**
    * Формирует HTML-код транзакции (дохода или расхода).
    * item - объект с информацией о транзакции
    * */
-  getTransactionHTML(item){
+  getTransactionHTML(item) {
     return `
       <div class="transaction transaction_${item.type.toLowerCase()} row">
         <div class="col-md-7 transaction__details">
@@ -185,8 +185,9 @@ class TransactionsPage {
   renderTransactions(data){
     const content = document.getElementsByClassName('content')[0];
     content.innerHTML = '';
+    
     for (let item of data) {
       content.insertAdjacentHTML('afterbegin', this.getTransactionHTML(item));
-    }
-  }
+    };
+  };
 }

@@ -29,6 +29,7 @@ class AccountsWidget {
    * */
   registerEvents() {
     const createBtn = this.element.querySelector('.create-account');
+    
     if (createBtn) {
       createBtn.addEventListener('click', (e) => {
         e.preventDefault();
@@ -36,16 +37,15 @@ class AccountsWidget {
         if (modal) modal.open();
       });
 
-      // Делегирование кликов по счетам
     this.element.addEventListener('click', (e) => {
       const acc = e.target.closest('.account');
+      
       if (!acc) return;
       e.preventDefault();
       this.onSelectAccount(acc);
       });
     }
   }
-
 
   /**
    * Метод доступен только авторизованным пользователям
@@ -59,7 +59,9 @@ class AccountsWidget {
    * */
   update() {
     const currentUser = User.current();
+    
     if (!currentUser) return;
+    
     Account.list(null, (err, res) => {
       if (res && res.success) {
         this.clear();
@@ -98,6 +100,7 @@ class AccountsWidget {
    * */
   getAccountHTML(item) {
     const sum = new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(item.sum);
+    
     return `
       <li class="account" data-id="${item.id}">
         <a href="#">

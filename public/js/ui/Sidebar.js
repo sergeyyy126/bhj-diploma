@@ -39,18 +39,22 @@ class Sidebar {
    * */
   static initAuthLinks() {
     const registerBtn = document.getElementsByClassName('menu-item_register')[0].children[0];
+    
     registerBtn.addEventListener('click', () => {
       App.getModal('register').open();
     });
 
     const loginBtn = document.getElementsByClassName('menu-item_login')[0].children[0];
+    
     loginBtn.addEventListener('click', () => {
       App.getModal('login').open();
     });
 
     const logoutBtn = document.getElementsByClassName('menu-item_logout')[0].children[0];
+    
     logoutBtn.addEventListener('click', (e) => {
       e.preventDefault();
+      
       User.logout((err, response) => {
         if (err) {
           console.error(err);

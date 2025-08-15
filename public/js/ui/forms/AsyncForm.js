@@ -41,8 +41,8 @@ class AsyncForm {
   getData() {
     const formData = new FormData(this.element);
     const data = {};
+
     for (const [key, value] of formData.entries()) {
-      // Если поле повторяется (массив чекбоксов/мультиселект), собираем в массив
       if (key in data) {
         if (!Array.isArray(data[key])) {
           data[key] = [data[key]];
@@ -52,6 +52,7 @@ class AsyncForm {
         data[key] = value;
       }
     }
+    
     return data;
   }
 

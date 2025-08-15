@@ -15,6 +15,7 @@ class Modal {
     if (!element) {
       throw new Error("Modal: element is required");
     }
+    
     this.element = element;
     this._dismissHandler = this.onClose.bind(this);
     this.registerEvents();

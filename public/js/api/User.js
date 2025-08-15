@@ -9,13 +9,12 @@ class User {
    * Устанавливает текущего пользователя в
    * локальном хранилище.
    * */
- 
   static setCurrent(user) {
     if (user === undefined || user === null) return;
     try {
       localStorage.setItem("user", JSON.stringify(user));
     } catch (e) {
-      // handle storage errors if needed
+      
     }
   }
 
@@ -23,7 +22,6 @@ class User {
    * Удаляет информацию об авторизованном
    * пользователе из локального хранилища.
    * */
-  
   static unsetCurrent() {
     try {
       localStorage.removeItem("user");
@@ -36,7 +34,6 @@ class User {
    * Возвращает текущего авторизованного пользователя
    * из локального хранилища
    * */
-  
   static current() {
     try {
       const raw = localStorage.getItem("user");
@@ -50,7 +47,6 @@ class User {
    * Получает информацию о текущем
    * авторизованном пользователе.
    * */
-  //
   static fetch(callback) {
     createRequest({
       url: this.URL + "/current",
@@ -77,7 +73,6 @@ class User {
    * сохранить пользователя через метод
    * User.setCurrent.
    * */
-  //
   static login(data, callback) {
     createRequest({
       url: this.URL + "/login",
@@ -94,7 +89,6 @@ class User {
    * сохранить пользователя через метод
    * User.setCurrent.
    * */
-  //
   static register(data, callback) {
     createRequest({
       url: this.URL + "/register",
@@ -118,8 +112,7 @@ class User {
    * Производит выход из приложения. После успешного
    * выхода необходимо вызвать метод User.unsetCurrent
    * */
-  
-   static logout(callback) {
+  static logout(callback) {
     const obj = {
       method: "POST",
       url: this.URL + '/logout',

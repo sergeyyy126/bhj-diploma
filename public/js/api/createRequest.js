@@ -2,7 +2,6 @@
  * Основная функция для совершения запросов
  * на сервер.
  * */
-
 const createRequest = (options = {}) => {
   const method = (options.method || "GET").toUpperCase();
   const urlBase = options.url || "";
@@ -33,11 +32,11 @@ const createRequest = (options = {}) => {
     if (status >= 200 && status < 300) {
       callback(null, xhr.response);
     } else {
-      const err = new Error("HTTP error: " + status);
-      err.status = status;
-      err.response = xhr.response;
-      callback(err, xhr.response);
-    }
+        const err = new Error("HTTP error: " + status);
+        err.status = status;
+        err.response = xhr.response;
+        callback(err, xhr.response);
+      }
   };
 
   xhr.onerror = () => {
@@ -51,12 +50,12 @@ const createRequest = (options = {}) => {
   if (method === "GET" || !options.data) {
     xhr.send();
   } else {
-    const formData = new FormData();
-    if (typeof options.data === "object") {
-      Object.keys(options.data).forEach((key) => {
+      const formData = new FormData();
+      if (typeof options.data === "object") {
+        Object.keys(options.data).forEach((key) => {
         formData.append(key, options.data[key]);
-      });
+        });
+      }
+      xhr.send(formData);
     }
-    xhr.send(formData);
-  }
 };
