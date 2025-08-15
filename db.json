@@ -35,6 +35,18 @@
       "email": "sergey@mail.ru",
       "password": "1111",
       "id": "bzpt1mgmecev80o"
+    },
+    {
+      "name": "Сергей",
+      "email": "ggg@mail.ru",
+      "password": "12345",
+      "id": "bzpt7vgmecizqti"
+    },
+    {
+      "name": "Сергей",
+      "email": "1111@mail.ru",
+      "password": "1111",
+      "id": "bzpt4i8mecj5jrk"
     }
   ],
   "accounts": [
@@ -62,6 +74,36 @@
       "name": "домашний",
       "user_id": "bzpt1mgmecev80o",
       "id": "bzpt4fkmecfme1f"
+    },
+    {
+      "name": "Т-б",
+      "user_id": "bzpt7vgmecizqti",
+      "id": "bzpt4z4mecj0sej"
+    },
+    {
+      "name": "апап",
+      "user_id": "bzpt7vgmecizqti",
+      "id": "bzpt4agmecj0xan"
+    },
+    {
+      "name": "ываыва",
+      "user_id": "bzpt7vgmecizqti",
+      "id": "bzpt9vkmecj23dl"
+    },
+    {
+      "name": "аываыв",
+      "user_id": "bzpt7vgmecizqti",
+      "id": "bzpt5qgmecj3wco"
+    },
+    {
+      "name": "сбер",
+      "user_id": "bzpt4i8mecj5jrk",
+      "id": "bzpt1ogmecj5phv"
+    },
+    {
+      "name": "озон",
+      "user_id": "bzpt4i8mecj5jrk",
+      "id": "bzpt7jkmecj5zr5"
     }
   ],
   "transactions": [
@@ -253,6 +295,24 @@
       "account_id": "bzpt4fkmecfme1f",
       "user_id": "bzpt1mgmecev80o",
       "created_at": "2025-08-15T06:16:50.418Z"
+    },
+    {
+      "id": "bzpt9m0mecj6eit",
+      "type": "income",
+      "name": "ЗП",
+      "sum": 5000,
+      "account_id": "bzpt1ogmecj5phv",
+      "user_id": "bzpt4i8mecj5jrk",
+      "created_at": "2025-08-15T07:52:48.388Z"
+    },
+    {
+      "id": "bzpt3v4mecj6nu0",
+      "type": "expense",
+      "name": "подарок",
+      "sum": 5000,
+      "account_id": "bzpt7jkmecj5zr5",
+      "user_id": "bzpt4i8mecj5jrk",
+      "created_at": "2025-08-15T07:53:00.455Z"
     }
   ]
 }

@@ -119,32 +119,17 @@ class User {
    * выхода необходимо вызвать метод User.unsetCurrent
    * */
   
-  static logout(callback) {
+   static logout(callback) {
     const obj = {
       method: "POST",
-      url: this.URL + "/logout",
-      callback: (err, response) => {
-      // Защита: если нет ответа, формируем понятную ошибку
-        if (err) {
-          if (typeof callback === 'function') callback(err, null);
-          return;
-        }
-
-        if (!response) {
-          const error = new Error('Empty response from server');
-          if (typeof callback === 'function') callback(error, null);
-          return;
-        }
-
-        // Явно проверяем success как true
-       if (response.success === true) {
+      url: this.URL + '/logout',
+      callback: function(err, response) {
+        if (response.success) {
           User.unsetCurrent(response.user);
-        }
-
-        if (typeof callback === 'function') {
-          callback(null, response);
-        }
+        } 
+        callback(err, response);
       }
-    }
+    };
+    createRequest(obj);
   }
 }
