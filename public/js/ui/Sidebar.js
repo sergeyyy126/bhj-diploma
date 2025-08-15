@@ -25,14 +25,8 @@ class Sidebar {
 
   btn.addEventListener('click', function (e) {
     e.preventDefault();
-
-    const isOpen = body.classList.contains('sidebar-open') && body.classList.contains('sidebar-collapse');
-
-    if (isOpen) {
-      body.classList.remove('sidebar-open', 'sidebar-collapse');
-    } else {
-      body.classList.add('sidebar-open', 'sidebar-collapse');
-    }
+    body.classList.toggle('sidebar-open');
+    body.classList.toggle('sidebar-collapse');
   });
 }
 
@@ -55,12 +49,17 @@ class Sidebar {
     });
 
     const logoutBtn = document.getElementsByClassName('menu-item_logout')[0].children[0];
-    logoutBtn.addEventListener('click', () => {
+    logoutBtn.addEventListener('click', (e) => {
+      e.preventDefault();
       User.logout((err, response) => {
-        if(response && response.success) {
+        if (err) {
+          console.error(err);
+          return;
+        }
+        if (response && response.success) {
           App.setState('init');
         }
-      })
+      });
     });
   }
 }

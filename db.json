@@ -29,6 +29,12 @@
       "email": "svetaa@mail.ru",
       "password": "2222",
       "id": "6e9afwmebvwr4d"
+    },
+    {
+      "name": "Сергей",
+      "email": "sergey@mail.ru",
+      "password": "1111",
+      "id": "bzpt1mgmecev80o"
     }
   ],
   "accounts": [
@@ -46,6 +52,16 @@
       "name": "Бизнес",
       "user_id": "1",
       "id": "3"
+    },
+    {
+      "name": "рабочий",
+      "user_id": "bzpt1mgmecev80o",
+      "id": "bzpta2wmecfltcg"
+    },
+    {
+      "name": "домашний",
+      "user_id": "bzpt1mgmecev80o",
+      "id": "bzpt4fkmecfme1f"
     }
   ],
   "transactions": [
@@ -183,6 +199,42 @@
       "sum": 300000,
       "type": "expense",
       "user_id": "1"
+    },
+    {
+      "id": "bzpt4aomecfmujq",
+      "type": "income",
+      "name": "зарплата",
+      "sum": 10000,
+      "account_id": "bzpta2wmecfltcg",
+      "user_id": "bzpt1mgmecev80o",
+      "created_at": "2025-08-15T06:13:37.189Z"
+    },
+    {
+      "id": "bzpt2swmecfn55r",
+      "type": "expense",
+      "name": "бензин",
+      "sum": 3000,
+      "account_id": "bzpta2wmecfltcg",
+      "user_id": "bzpt1mgmecev80o",
+      "created_at": "2025-08-15T06:13:50.942Z"
+    },
+    {
+      "id": "bzpt3b8mecfnxs4",
+      "type": "income",
+      "name": "продажа личных вещей",
+      "sum": 2000,
+      "account_id": "bzpt4fkmecfme1f",
+      "user_id": "bzpt1mgmecev80o",
+      "created_at": "2025-08-15T06:14:28.035Z"
+    },
+    {
+      "id": "bzpt930mecfodxy",
+      "type": "expense",
+      "name": "кафе",
+      "sum": 1000,
+      "account_id": "bzpt4fkmecfme1f",
+      "user_id": "bzpt1mgmecev80o",
+      "created_at": "2025-08-15T06:14:48.981Z"
     }
   ]
 }

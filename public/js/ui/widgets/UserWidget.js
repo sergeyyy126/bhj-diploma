@@ -13,7 +13,7 @@ class UserWidget {
    * */
   constructor(element){
     if (!element) {
-      throw "Error";
+      throw new Error('UserWidget: element is required');
     }
     this.element = element;
   }
@@ -25,11 +25,18 @@ class UserWidget {
    * в элемент .user-name устанавливает имя
    * авторизованного пользователя
    * */
-  update(){
+  update() {
     const user = User.current();
-    if (user) {
-      const userName = document.getElementsByClassName('user-name')[0];
-      userName.textContent = user.name;
+    const userNameNode = this.element.querySelector('.user-name');
+
+    if (!userNameNode) {
+      return;
+    }
+
+    if (user && user.name) {
+      userNameNode.textContent = user.name;
+    } else {
+      userNameNode.textContent = '';
     }
   }
 }

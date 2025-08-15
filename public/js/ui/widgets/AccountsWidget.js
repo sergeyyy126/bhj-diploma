@@ -13,11 +13,10 @@ class AccountsWidget {
    * Если переданный элемент не существует,
    * необходимо выкинуть ошибку.
    * */
-  constructor( element ) {
-    if (!element) {
-      throw "Error";
-    }
+  constructor(element) {
+    if (!element) throw new Error('AccountsWidget: element is required');
     this.element = element;
+    this.registerEvents();
     this.update();
   }
 
@@ -29,19 +28,24 @@ class AccountsWidget {
    * вызывает AccountsWidget.onSelectAccount()
    * */
   registerEvents() {
-    const createAccount = document.getElementsByClassName('create-account')[0];
-    createAccount.addEventListener('click', () => {
-      App.getModal('createAccount').open();
-    })
-    const accounts = document.getElementsByClassName('account');
-    for (let account of accounts) {
-      account.addEventListener('click', (event) => {
-        event.preventDefault();
-        AccountsWidget.onSelectAccount(account);
+    const createBtn = this.element.querySelector('.create-account');
+    if (createBtn) {
+      createBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const modal = App.getModal('createAccount');
+        if (modal) modal.open();
+      });
+
+      // Делегирование кликов по счетам
+    this.element.addEventListener('click', (e) => {
+      const acc = e.target.closest('.account');
+      if (!acc) return;
+      e.preventDefault();
+      this.onSelectAccount(acc);
       });
     }
-
   }
+
 
   /**
    * Метод доступен только авторизованным пользователям
@@ -54,15 +58,14 @@ class AccountsWidget {
    * метода renderItem()
    * */
   update() {
-    if (User.current()) {
-      Account.list(null, (error, response) => {
-        if (response && response.success && response.data.length) {
-          this.clear();
-          this.renderItem(response.data);
-          this.registerEvents();
-        }
-      });
-    }
+    const currentUser = User.current();
+    if (!currentUser) return;
+    Account.list(null, (err, res) => {
+      if (res && res.success) {
+        this.clear();
+        if (res.data && res.data.length) this.renderItem(res.data);
+      }
+    });
   }
 
   /**
@@ -71,11 +74,7 @@ class AccountsWidget {
    * в боковой колонке
    * */
   clear() {
-    const sidebarAccounts = document.getElementsByClassName('sidebar-menu accounts-panel')[0];
-    const accounts = sidebarAccounts.getElementsByClassName('account');
-    for (let account of [...accounts].reverse()) {
-      sidebarAccounts.removeChild(account);
-    }
+    this.element.querySelectorAll('.account').forEach(el => el.remove());
   }
 
   /**
@@ -85,13 +84,11 @@ class AccountsWidget {
    * счёта класс .active.
    * Вызывает App.showPage( 'transactions', { account_id: id_счёта });
    * */
-  static onSelectAccount( element ) {
-    const accounts = document.getElementsByClassName('account');
-    for (let account of accounts) {
-      account.classList.remove('active');
-    }
+  onSelectAccount(element) {
+    this.element.querySelectorAll('.account').forEach(el => el.classList.remove('active'));
     element.classList.add('active');
-    App.showPage( 'transactions', { account_id: element.dataset.id });
+    const id = element.dataset.id;
+    App.showPage('transactions', { account_id: id });
   }
 
   /**
@@ -99,14 +96,15 @@ class AccountsWidget {
    * отображения в боковой колонке.
    * item - объект с данными о счёте
    * */
-  getAccountHTML(item){
+  getAccountHTML(item) {
+    const sum = new Intl.NumberFormat('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(item.sum);
     return `
-    <li class="account" data-id="${item.id}">
-      <a href="#">
-        <span>${item.name}</span> /
-        <span>${item.sum} ₽</span>
-      </a>
-    </li>
+      <li class="account" data-id="${item.id}">
+        <a href="#">
+          <span>${item.name}</span> /
+          <span>${sum} ₽</span>
+        </a>
+      </li>
     `;
   }
 
@@ -116,10 +114,9 @@ class AccountsWidget {
    * AccountsWidget.getAccountHTML HTML-код элемента
    * и добавляет его внутрь элемента виджета
    * */
-  renderItem(data){
-    const sidebarAccounts = document.getElementsByClassName('sidebar-menu accounts-panel')[0];
-    for (let item of data) {
-      sidebarAccounts.insertAdjacentHTML('beforeEnd', this.getAccountHTML(item));
-    }
+  renderItem(data) {
+    data.forEach(item => {
+      this.element.insertAdjacentHTML('beforeend', this.getAccountHTML(item));
+    });
   }
 }
